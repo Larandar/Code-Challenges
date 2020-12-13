@@ -10,6 +10,8 @@ pandas = "*"
 pyfunctional = "*"
 
 [dev-packages]
+pytest="*"
+pytest-watch="*"
 pytest-black = "*"
 pytest-pydocstyle = "*"
 pytest-isort = "*"
