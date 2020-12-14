@@ -6,8 +6,9 @@ name = "pypi"
 [packages]
 click = "*"
 requests = "*"
-pandas = "*"
 pyfunctional = "*"
+pandas = "*"
+sympy = "*"
 
 [dev-packages]
 pytest="*"
