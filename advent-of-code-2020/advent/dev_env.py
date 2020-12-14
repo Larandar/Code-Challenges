@@ -1,38 +1,32 @@
 """Commands for handling dev environment."""
+import click
+
 from advent.const import DAYS_DIR
 
 COMMON_IMPORTS = """
-import logging
-import pprint
-import math
-import itertools, functools
+from functional.pipeline import Sequence
 
-import attr, click
-import pandas as pd, numpy as np
-
-import advent.inputs as inputs
+from advent.solver import AdventSolver
 """
 
-COMMON_CODE = """
-AOC_DAY = {day}
-INPUT_FILE = inputs.file_of_day(AOC_DAY)
-"""
+PART_FUNCTION = '''
+class Day{day:02d}Part{part}_Solver(metaclass=AdventSolver):
+    """Solver for part {part}/2 of day {day}."""
 
-PART_FUNCTION = """
-def part{part}():
-    \"""Solution for part {part} of day {day}.\"""
-    logging.info("SOLVING DAY {day} PART {part}")
+    SAMPLE_RESULTS = {{}}
+    EXPECTED_RESULT = None
 
-    result = "Hello, World!"
-
-    click.echo(click.style("RESULT >> ", fg="green") + pprint.pformat(result))
-    # assert result == XXXX  # Valid result for my input
-"""
+    def solve(self, puzzle_input: Sequence):
+        """Solve part {part}/2 of day {day}."""
+        raise NotImplementedError("Solution not yet implemented")
+'''
 
 
+@click.command()
+@click.argument("day", type=int)
 def create(day):
     """Command to create an environment for the next day."""
-    py_file = DAYS_DIR / f"day{day:02d}.py"
+    py_file = DAYS_DIR / f"solver_day{day:02d}.py"
     if py_file.exists():
         raise ValueError(f"File {py_file} already exists.")
 
@@ -42,9 +36,12 @@ def create(day):
                 [
                     f'"""Advent of Code 2020, Day {day}: {{TITLE_HERE}}."""',
                     COMMON_IMPORTS,
-                    COMMON_CODE.format(day=day),
                     PART_FUNCTION.format(day=day, part=1),
                     PART_FUNCTION.format(day=day, part=2),
                 ]
             )
         )
+
+
+if __name__ == "__main__":
+    create()
